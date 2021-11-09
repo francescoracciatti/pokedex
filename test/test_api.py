@@ -88,6 +88,15 @@ class ExpectedJSON(ABC):
                 "isLegendary": False
             }
 
+        if name == 'ditto':
+            return {
+                "name": "ditto",
+                "description": "Capable of copying an enemy's genetic code to instantly transform itself into "
+                               "a duplicate of the enemy.",
+                "habitat": "urban",
+                "isLegendary": False
+            }
+
         raise UnrecognizedPokemon(f"Pokemon {name} unrecognized")
 
     @staticmethod
@@ -168,7 +177,7 @@ class TestAPI(unittest.TestCase):
 
     def test_basic_info(self) -> None:
         """
-        Tests the basic info provided by pokedex for the pokemon mewtwo.
+        Tests the basic info for the pokemon mewtwo.
         """
         # Gets basic info of mewtwo
         response = requests.get(f"{self.ENDPOINT_BASIC_INFO}/mewtwo")
@@ -179,61 +188,49 @@ class TestAPI(unittest.TestCase):
 
     def test_translated_info_legendary(self) -> None:
         """
-        Tests the basic info provided by pokedex for the pokemon mewtwo (legendary pokemon).
+        Tests the translated info for the pokemon mewtwo (legendary pokemon).
         """
-        # Gets basic info of mewtwo
         response = requests.get(f"{self.ENDPOINT_TRANSLATED}/mewtwo")
-        if response.ok:
-            json_actual = response.json()
-        else:
-            self.fail(f"Cannot satisfy the GET request, status code {response.status_code}")
+        self.assertIn(response.status_code, [200, 429],
+                      f"Cannot satisfy the GET request, status code {response.status_code}")
+        json_actual = response.json()
 
         if response.status_code == 200:
             json_expected = ExpectedJSON.translated('mewtwo')
-        elif response.status_code == 502:  # Bad Gateway, uses standard description
+        else:  # 429 Too many requests
             json_expected = ExpectedJSON.basic_info('mewtwo')
-        else:
-            self.fail(f"Status code {response.status_code} not handled")
 
         self.assertEqual(JSON.deepsort(json_expected), JSON.deepsort(json_actual), "JSON mismatch")
 
     def test_translated_info_cave(self) -> None:
         """
-        Tests the basic info provided by pokedex for the pokemon zubat (cave pokemon).
+        Tests the translated info for the pokemon zubat (cave pokemon).
         """
-        # Gets basic info of mewtwo
         response = requests.get(f"{self.ENDPOINT_TRANSLATED}/zubat")
-        if response.ok:
-            json_actual = response.json()
-        else:
-            self.fail(f"Cannot satisfy the GET request, status code {response.status_code}")
+        self.assertIn(response.status_code, [200, 429],
+                      f"Cannot satisfy the GET request, status code {response.status_code}")
+        json_actual = response.json()
 
         if response.status_code == 200:
             json_expected = ExpectedJSON.translated('zubat')
-        elif response.status_code == 502:  # Bad Gateway, uses standard description
+        else:  # 429 Too many requests
             json_expected = ExpectedJSON.basic_info('zubat')
-        else:
-            self.fail(f"Status code {response.status_code} not handled")
 
         self.assertEqual(JSON.deepsort(json_expected), JSON.deepsort(json_actual), "JSON mismatch")
 
     def test_translated_info_normal(self) -> None:
         """
-        Tests the basic info provided by pokedex for normal pokemon (neither legendary nor cave).
+        Tests the translated info for normal pokemon (neither legendary nor cave).
         """
-        # Gets basic info of mewtwo
         response = requests.get(f"{self.ENDPOINT_TRANSLATED}/ditto")
-        if response.ok:
-            json_actual = response.json()
-        else:
-            self.fail(f"Cannot satisfy the GET request, status code {response.status_code}")
+        self.assertIn(response.status_code, [200, 429],
+                      f"Cannot satisfy the GET request, status code {response.status_code}")
+        json_actual = response.json()
 
         if response.status_code == 200:
             json_expected = ExpectedJSON.translated('ditto')
-        elif response.status_code == 502:  # Bad Gateway, uses standard description
+        else:  # 429 Too many requests
             json_expected = ExpectedJSON.basic_info('ditto')
-        else:
-            self.fail(f"Status code {response.status_code} not handled")
 
         self.assertEqual(JSON.deepsort(json_expected), JSON.deepsort(json_actual), "JSON mismatch")
 
