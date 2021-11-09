@@ -11,7 +11,7 @@ import sys
 from typing import Dict, Any, Optional
 
 import requests
-from flask import Flask, jsonify, Response
+from flask import Flask, Response
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
@@ -162,7 +162,7 @@ def translated(name: str):
             mimetype='application/json'
         )
         return response
-    except KeyError as e:
+    except KeyError as e:  # Return basic info
         logging.error(f"Got exception while looking for the translated text, {e}")
         return app.response_class(
             response=json.dumps(basic_info),
