@@ -1,10 +1,11 @@
 # Pokedex
 Pokedex is a micro web server that provides public endpoints to gather information about Pokemon.
 
+![test gif](doc/gif/test-capture.gif)
+
 Pokedex is implemented in Python3 + Flask and relies on:
  - [PokéApi](https://pokeapi.com)
  - [FunTranslations](https://funtranslations.com)
- 
 
 ## Running
 By default, the web server runs at `0.0.0.0/5000`. 
