@@ -5,6 +5,7 @@ This module provides the micro web server implementing the pokedex.
 from __future__ import annotations
 
 import configparser
+import json
 import logging
 import sys
 from typing import Dict, Any, Optional
@@ -12,7 +13,7 @@ from typing import Dict, Any, Optional
 import requests
 from flask import Flask, jsonify, Response
 
-logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
+logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S',
                     level=logging.INFO)
 
@@ -51,8 +52,6 @@ class Pokedex(object):
         :param json: the json containing the description of the pokemon
         :return: the description of the pokemon if available for the current language and version, otherwise None
         """
-        logging.info(f"Getting description in language {cls.language} and version {cls.version}")
-
         entries = json['flavor_text_entries']
         for e in entries:
             # Looks for the current language and version
@@ -65,13 +64,13 @@ class Pokedex(object):
 ENDPOINT_POKEAPI = 'https://pokeapi.co/api/v2/pokemon-species'
 
 # Public FunTranslations' endpoint used to translate descriptions
-ENDPOINT_TRANSLATIONS = 'https://funtranslation.co/api/v2/pokemon-species'
+ENDPOINT_TRANSLATIONS = 'https://api.funtranslations.com/translate'
 TRANSLATOR_YODA = 'yoda.json'
 TRANSLATOR_SHAKESPEARE = 'shakespeare.json'
 
 
 @app.route('/pokemon/<string:name>')
-def pokemon(name: str):
+def pokemon(name: str) -> Response:
     """
     Endpoint /HTTP/GET /pokemon/<pokemon name>
 
@@ -84,28 +83,29 @@ def pokemon(name: str):
     :param name: the name of the pokemon
     :return: the json containing the basic info of the given pokemon
     """
+    logging.warning(f"Requesting basic info about {name} ...")
     response = requests.get(f"{ENDPOINT_POKEAPI}/{name}")
     if response.status_code != 200:
         logging.warning(f"Cannot get basic info about {name}, status code {response.status_code}")
-        return response
+        return app.response_class(status=response.status_code)
 
     info = response.json()
 
     try:
-        name = info['name']
-        description = Pokedex.get_description(info)
-        habitat = info['habitat']['name']
-        is_legendary = info['is_legendary']
+        data = {
+            "name": info['name'],
+            "description": Pokedex.get_description(info),
+            "habitat": info['habitat']['name'],
+            "isLegendary": info['is_legendary']
+        }
+        return app.response_class(
+            response=json.dumps(data),
+            status=200,
+            mimetype='application/json'
+        )
     except (KeyError, RuntimeError) as e:
         logging.error(f"Exception caught while retrieving info from json: {e}")
-        return Response(status=409)  # Conflict, bad resource state
-
-    return jsonify({
-        "name": name,
-        "description": description,
-        "habitat": habitat,
-        "isLegendary": is_legendary
-    })
+        return app.response_class(status=409)  # Conflict, bad resource state
 
 
 @app.route('/pokemon/translated/<string:name>')
@@ -128,14 +128,46 @@ def translated(name: str):
     :param name:
     :return:
     """
-    logging.info(f"Got {name}")
-    return jsonify({
-        "name": "mewtwo",
-        "description": "It was created by a scientist after years of horrific gene splicing "
-                       "and DNA engineering experiments.",
-        "habitat": "rare",
-        "isLegendary": True
-    })
+    # Get basic info
+    response = pokemon(name)
+    if response.status_code != 200:
+        logging.warning(f"Cannot get basic info about {name}, status code {response.status_code}")
+        return app.response_class(status=response.status_code)
+
+    # Translate the pokemon description
+    basic_info = response.get_json()
+    if basic_info['isLegendary'] or basic_info['habitat'].lower() == 'cave':
+        # Applies Yoda translation
+        logging.info(f"Requesting Yoda translation for {name}...")
+        response = requests.post(f"{ENDPOINT_TRANSLATIONS}/{TRANSLATOR_YODA}", data={'text': basic_info['description']})
+    else:
+        # Applies Shakespeare translation
+        logging.info(f"Requesting Shakespeare translation for {name}...")
+        response = requests.post(f"{ENDPOINT_TRANSLATIONS}/{TRANSLATOR_YODA}", data={'text': basic_info['description']})
+
+    if response.status_code != 200:
+        logging.info(f"Cannot translate description, status code {response.status_code}")
+        return app.response_class(
+            response=json.dumps(basic_info),
+            status=response.status_code,
+            mimetype='application/json'
+        )
+
+    try:
+        translated_info = basic_info
+        translated_info['description'] = response.json()['contents']['translated']
+        response = app.response_class(
+            response=json.dumps(translated_info),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+    except KeyError as e:
+        logging.error(f"Got exception while looking for the translated text, {e}")
+        return app.response_class(
+            response=json.dumps(basic_info),
+            status=200
+        )
 
 
 if __name__ == '__main__':
