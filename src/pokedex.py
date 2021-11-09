@@ -36,16 +36,16 @@ def endpoint_pokemon(name: str) -> Response:
     :param name: the name of the pokemon
     :return: the json containing the basic info of the given pokemon
     """
-    logging.warning(f"Requesting basic info about {name} ...")
+    logging.info(f"Requesting basic info about {name} ...")
 
-    endpoint_pokeapi = app.config.get('ENDPOINT_POKEAPI')
+    endpoint_pokeapi = app.config['ENDPOINT_POKEAPI']
     response = requests.get(f"{endpoint_pokeapi}/{name}")
     if response.status_code != 200:
         logging.warning(f"Cannot get basic info about {name}, status code {response.status_code}")
         return app.response_class(status=response.status_code)
 
     try:
-        pokemon = Pokemon(response.json(), Configuration(app.config.get('LANGUAGE'), app.config.get('VERSION')))
+        pokemon = Pokemon(response.json(), Configuration(app.config['LANGUAGE'], app.config['VERSION']))
         return app.response_class(
             response=json.dumps(pokemon.json()),
             status=200,
@@ -76,6 +76,8 @@ def endpoint_pokemon_translated(name: str) -> Response:
     :param name:
     :return:
     """
+    logging.info(f"Requesting translated info about {name} ...")
+
     # Get basic info
     response = endpoint_pokemon(name)
     if response.status_code != 200:
@@ -83,17 +85,17 @@ def endpoint_pokemon_translated(name: str) -> Response:
         return app.response_class(status=response.status_code)
 
     # Translate the pokemon description
-    pokemon = Pokemon(response.get_json(), Configuration(app.config.get('LANGUAGE'), app.config.get('VERSION')))
+    pokemon = Pokemon(response.get_json(), Configuration(app.config['LANGUAGE'], app.config['VERSION']))
 
-    endpoint_translation = app.config.get('ENDPOINT_POKEAPI')
+    endpoint_translation = app.config['ENDPOINT_POKEAPI']
     if pokemon.is_legendary or pokemon.habitat.lower() == 'cave':
         # Applies Yoda translation
         logging.info(f"Requesting Yoda translation for {name}...")
-        translator = app.config.get('TRANSLATOR_YODA')
+        translator = app.config['TRANSLATOR_YODA']
     else:
         # Applies Shakespeare translation
         logging.info(f"Requesting Shakespeare translation for {name}...")
-        translator = app.config.get('TRANSLATOR_SHAKESPEARE')
+        translator = app.config['TRANSLATOR_SHAKESPEARE']
 
     response = requests.post(f"{endpoint_translation}/{translator}", data={'text': pokemon.description})
 
@@ -125,19 +127,4 @@ if __name__ == '__main__':
     """
     Entry point, starts the web server.
     """
-    logging.info("Pokedex is running...")
-
-    app.config.from_object('config.Pokedex')
-
-    host = app.config.get('HOST')
-    port = app.config.get('PORT')
-
-    # Current args override the web server configuration
-    if len(sys.argv) > 1:
-        host = sys.argv.pop()
-        port = int(sys.argv.pop())
-        logging.info(f"Overriding configuration with host {host} and port {port}")
-
-    app.run(host=host, port=port)
-
-    logging.info(f"Done, going to sleep in my pokeball")
+    logging.critical("Use the command 'flask run' to start the web server")
