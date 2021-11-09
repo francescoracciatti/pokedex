@@ -4,8 +4,21 @@ Pokedex is a micro web server that provides public endpoints to gather informati
 ![test gif](doc/gif/test-capture.gif)
 
 Pokedex is implemented in Python3 + Flask and relies on:
- - [PokéApi](https://pokeapi.com)
- - [FunTranslations](https://funtranslations.com)
+ - [PokéApi](https://pokeapi.com) to gather information about Pokemon,
+ - [FunTranslations](https://funtranslations.com) to translate descriptions.
+
+
+# Table Of Contents
+- [Running](#running)
+  - [Docker](#docker)
+  - [Terminal](#terminal)
+- [HowTo](#how-to)
+- [Endpoints](#endpoints)
+  - [Basic Pokemon Information](#basic-pokemon-information)
+  - [Translated Pokemon Description](#translated-pokemon-description)
+- [Author](#author)
+- [License](#license)
+
 
 ## Running
 By default, the web server runs at `0.0.0.0/5000`. 
@@ -17,13 +30,22 @@ $ docker run -p 5000:5000 pokedex
 ```
 
 ### Terminal
-Initialize a new venv and install the [requirements](requirements.txt), then:
+Initialize a new venv and install the [requirements](requirements.txt):
+```shell
+$ cd path_to/pokedex
+$ pip install -r requirements.txt
+$ pip install -e .
+```
+Then run:
 ```shell
 $ cd path_to/pokedex/src
 $ export FLASK_APP=pokedex
 $ flask run
  ```
-You can specify the host and port by editing the configuration file [pokedex/src/config.ini](src/config.ini).
+
+
+## How To
+Refer [HOWTO](HOWTO.md) to find out insights about building, testing, running and customizing Pokedex.
 
 
 ## Endpoints
@@ -79,8 +101,10 @@ http://localhost:5000/pokemon/translated/mewtwo
 }
 ```
 
+
 ## Author
 Francesco Racciatti
+
 
 ## License
 This project is licensed under the [MIT license](LICENSE).
