@@ -21,7 +21,13 @@ Then build the image and run the container.
 ```shell
 $ cd path_to/pokedex
 $ docker build --tag pokedex .
-$ docker run -p 5000:6000 pokedex
+$ docker run -p 6000:6000 pokedex
+```
+
+Alternatively, if you want to change only the port Docker exposes to your local machine,
+you can simply change the `publish` parameter withouth changing the Dockerfile. 
+````shell
+$ docker run -p 6000:5000 pokedex
 ```
 
 ## Terminal
