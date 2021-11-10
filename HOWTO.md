@@ -1,0 +1,47 @@
+# How To
+- [Run](#run)
+- [Change Host/Port](#change-hostport)
+- [Change Language/Version](#change-languageversion)
+- [Test](#test)
+
+# Run
+You can run Pokedex either via Docker or via Terminal. 
+Refer [README::Running](README.md#running)
+
+# Change Host/Port
+## Docker 
+Edit the `CMD` line at the end of the Dockerfile.
+```dockerfile
+CMD ["flask", "run", "--host", "0.0.0.0", "--port", "5000"]
+```
+Set the host and the port you prefer.
+
+## Terminal
+Specify the host and port you prefer when running pokedex.
+```shell
+$ flask run --host 0.0.0.0 --port 5000
+```
+
+# Change Language/Version
+To change the language/version of the Pokedex web server, 
+edit the entries `LANGUAGE`/`VERSION` in [config.py](config.py).
+```python
+class Pokedex(object):
+    """
+    Web server configuration parameters.
+    """
+    HOST = '0.0.0.0'
+    PORT = 5000
+
+    LANGUAGE = 'fr'
+    VERSION = 'black'
+```
+
+You can find the available languages [here](https://pokeapi.co/api/v2/language/). \
+You can find the available versions [here](https://pokeapi.co/api/v2/version/).
+
+
+## Test
+When the web server runs, you can make API calls via Web Browser or terminal.
+
+If you prefer the terminal, you may think to use [httpie](https://httpie.io/).

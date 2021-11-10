@@ -22,9 +22,10 @@ Pokedex is implemented in Python3 + Flask and relies on:
 
 ## Running
 ### Docker
-By default, the web server runs at `0.0.0.0/5000`.
+By default, the containerized web server runs at `0.0.0.0/5000`.
 ```shell
 $ cd path_to/pokedex
+$ docker build --tag pokedex .
 $ docker run -p 5000:5000 pokedex
 ```
 
