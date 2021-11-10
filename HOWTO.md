@@ -57,6 +57,9 @@ You can find the available versions [here](https://pokeapi.co/api/v2/version/).
 
 
 ## Test
-When the web server runs, you can make API calls via Web Browser or terminal.
+When the web server runs, you can make API calls via Web Browser or terminal 
+at your target host and port.
 
 If you prefer the terminal, you may think to use [httpie](https://httpie.io/).
+
+![test capture](doc/gif/test-capture.gif)
