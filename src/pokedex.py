@@ -127,4 +127,4 @@ if __name__ == '__main__':
     """
     Entry point, starts the web server.
     """
-    logging.critical("Use the command 'flask run' to start the web server")
+    logging.critical("Use the command 'flask run --host=MY_IP_ADDRESS --port=MY_PORT' to start the web server")
