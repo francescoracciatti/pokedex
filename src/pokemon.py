@@ -2,6 +2,8 @@
 This module provides the standard model for pokemon.
 """
 
+from __future__ import annotations
+
 from typing import Dict, Any, Optional
 
 from src.utils.utils import replace_escape
@@ -38,17 +40,33 @@ class Pokemon(object):
                 return replace_escape(e['flavor_text'])
         return None
 
-    def __init__(self, json: Dict[Any, Any], configuration: Configuration) -> None:
+    @classmethod
+    def build_from_pokeapi_json(cls, pokeapi_json: Dict[Any, Any], configuration: Configuration) -> Pokemon:
         """
-        Stores the description of the pokemon.
+        Builds a pokemon from the pokeapi json response.
+
+        :param pokeapi_json: the json containing the description of the pokemon
+        :param configuration: the configuration parameters
+        """
+        json = {
+            "name": pokeapi_json['name'],
+            "description": cls.retrieve_description(pokeapi_json, configuration),
+            "habitat": pokeapi_json['habitat']['name'],
+            "isLegendary": pokeapi_json['is_legendary']
+        }
+        return Pokemon(json)
+
+    def __init__(self, json: Dict[str, Any]) -> None:
+        """
+        Builds the pokemon from a json containing its description.
 
         :param json: the json containing the description of the pokemon
         :param configuration: the configuration parameters
         """
         self.name = json['name']
-        self.description = self.retrieve_description(json, configuration)
-        self.habitat = json['habitat']['name']
-        self.is_legendary = json['is_legendary']
+        self.description = json['description']
+        self.habitat = json['habitat']
+        self.is_legendary = json['isLegendary']
 
     def json(self) -> Dict[str, Any]:
         """

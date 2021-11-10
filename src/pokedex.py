@@ -45,7 +45,8 @@ def endpoint_pokemon(name: str) -> Response:
         return app.response_class(status=response.status_code)
 
     try:
-        pokemon = Pokemon(response.json(), Configuration(app.config['LANGUAGE'], app.config['VERSION']))
+        pokemon = Pokemon.build_from_pokeapi_json(response.json(),
+                                                  Configuration(app.config['LANGUAGE'], app.config['VERSION']))
         return app.response_class(
             response=json.dumps(pokemon.json()),
             status=200,
@@ -85,9 +86,9 @@ def endpoint_pokemon_translated(name: str) -> Response:
         return app.response_class(status=response.status_code)
 
     # Translate the pokemon description
-    pokemon = Pokemon(response.get_json(), Configuration(app.config['LANGUAGE'], app.config['VERSION']))
+    pokemon = Pokemon(response.get_json())
 
-    endpoint_translation = app.config['ENDPOINT_POKEAPI']
+    endpoint_translation = app.config['ENDPOINT_TRANSLATIONS']
     if pokemon.is_legendary or pokemon.habitat.lower() == 'cave':
         # Applies Yoda translation
         logging.info(f"Requesting Yoda translation for {name}...")
