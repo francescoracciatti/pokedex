@@ -6,9 +6,6 @@ class Pokedex(object):
     """
     Configuration parameters.
     """
-    HOST = '0.0.0.0'
-    PORT = 5000
-
     LANGUAGE = 'en'
     VERSION = 'red'
 
