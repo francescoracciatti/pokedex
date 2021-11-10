@@ -26,7 +26,7 @@ $ docker run -p 6000:6000 pokedex
 
 Alternatively, if you want to change only the port Docker exposes to your local machine,
 you can simply change the `publish` parameter withouth changing the Dockerfile. 
-````shell
+```shell
 $ docker run -p 6000:5000 pokedex
 ```
 
