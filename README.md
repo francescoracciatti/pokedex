@@ -45,7 +45,7 @@ $ flask run --host=0.0.0.0 --port=5000
 
 
 ## How To
-Refer [HOWTO](HOWTO.md) to find out insights about building, testing, running and customizing Pokedex.
+Refer to [HOWTO](HOWTO.md) to find out insights about building, testing, running and customizing Pokedex.
 
 
 ## Endpoints
