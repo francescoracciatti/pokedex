@@ -2,9 +2,11 @@
 This module provides unittest for public endpoints.
 """
 
+import argparse
 import sys
 import unittest
 from abc import ABC
+from ipaddress import ip_address
 from typing import Dict, Any, List
 
 import requests as requests
@@ -145,13 +147,20 @@ class ExpectedJSON(ABC):
 
 class TestAPI(unittest.TestCase):
 
-    # Default configuration
-    HOST = '127.0.0.1'
-    PORT = 6000
-
     # Endpoints
-    ENDPOINT_BASIC_INFO = f"http://{HOST}:{PORT}/pokemon"
-    ENDPOINT_TRANSLATED = f"http://{HOST}:{PORT}/pokemon/translated"
+    ENDPOINT_BASIC_INFO = None
+    ENDPOINT_TRANSLATED = None
+
+    @staticmethod
+    def init(host: str, port: int) -> None:
+        """
+        Initializes the Test class.
+
+        :param host: the host ip address
+        :param port: the port
+        """
+        TestAPI.ENDPOINT_BASIC_INFO = f"http://{host}:{port}/pokemon"
+        TestAPI.ENDPOINT_TRANSLATED = f"http://{host}:{port}/pokemon/translated"
 
     def setUP(self) -> None:
         pass
@@ -236,7 +245,13 @@ class TestAPI(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        TestAPI.HOST = sys.argv.pop()
-        TestAPI.PORT = sys.argv.pop()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--host', dest='host', required=True, help='target host', type=ip_address)
+    parser.add_argument('--port', dest='port', required=True, help='target port', type=int)
+    parser.add_argument('unittest_args', nargs='*')
+    args = parser.parse_args()
+    print(f"Running tests, looking for pokedex at {args.host}:{args.port}")
+
+    sys.argv[1:] = args.unittest_args
+    TestAPI.init(args.host, args.port)
     unittest.main()

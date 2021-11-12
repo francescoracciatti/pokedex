@@ -2,6 +2,7 @@
 Web server configuration parameters.
 """
 
+
 class Pokedex(object):
     """
     Configuration parameters.
