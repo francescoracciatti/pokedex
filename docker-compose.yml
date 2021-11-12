@@ -1,0 +1,26 @@
+version: '2.4'
+
+services:
+
+  test-api:
+    build:
+      context: test
+      dockerfile: Dockerfile
+    network_mode: host
+    depends_on:
+      pokedex-server:
+        condition: service_healthy
+    links:
+      - pokedex-server
+
+
+  pokedex-server:
+    build:
+      context: .
+    ports:
+      - "6000:6000"
+    healthcheck:
+      test: [ "CMD", "curl", "http://localhost:6000/pokemon/mewtwo"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
