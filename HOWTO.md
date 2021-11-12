@@ -9,32 +9,32 @@ You can run Pokedex either via Docker or via Terminal.
 Refer [README::Running](README.md#running)
 
 # Change Host/Port
-If you want to set a custom host and port like 192.168.0.1:6000, you can do the following.
+If you want to set a custom host and port like 192.168.0.1:7000, you can do the following.
 
 ## Docker 
 Edit the `CMD` line at the end of the Dockerfile.
 ```dockerfile
-CMD ["flask", "run", "--host", "192.168.0.1", "--port", "6000"]
+CMD ["flask", "run", "--host", "192.168.0.1", "--port", "7000"]
 ```
 Set the host and the port you prefer.
 Then build the image and run the container.
 ```shell
 $ cd path_to/pokedex
 $ docker build --tag pokedex .
-$ docker run -p 6000:6000 pokedex
+$ docker run -p 7000:7000 pokedex
 ```
 
 Alternatively, if you want to change only the port Docker exposes to your local machine,
-you can simply change the `publish` parameter withouth changing the Dockerfile. 
+you can simply change the `publish` parameter without changing the Dockerfile. 
 ```shell
-$ docker run -p 6000:5000 pokedex
+$ docker run -p 7000:6000 pokedex
 ```
 
 ## Terminal
 Specify the host and port you prefer when running pokedex.
 ```shell
 $ cd path_to/pokedex/src
-$ flask run --host 192.168.0.1 --port 6000
+$ flask run --host 192.168.0.1 --port 7000
 ```
 
 # Change Language/Version
@@ -45,9 +45,6 @@ class Pokedex(object):
     """
     Web server configuration parameters.
     """
-    HOST = '0.0.0.0'
-    PORT = 5000
-
     LANGUAGE = 'fr'
     VERSION = 'black'
 ```

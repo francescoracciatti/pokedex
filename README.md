@@ -22,11 +22,11 @@ Pokedex is implemented in Python3 + Flask and relies on:
 
 ## Running
 ### Docker
-By default, the containerized web server runs at `0.0.0.0/5000`.
+By default, the containerized web server runs at `0.0.0.0/6000`.
 ```shell
 $ cd path_to/pokedex
 $ docker build --tag pokedex .
-$ docker run -p 5000:5000 pokedex
+$ docker run -p 6000:6000 pokedex
 ```
 
 ### Terminal
@@ -40,8 +40,18 @@ Then run:
 ```shell
 $ cd path_to/pokedex/src
 $ export FLASK_APP=pokedex
-$ flask run --host=0.0.0.0 --port=5000
+$ flask run --host=0.0.0.0 --port=6000
  ```
+
+
+# Test
+Before running tests, enable Docker Compose V2.
+To run tests:
+```shell
+$ cd path_to/pokedex
+$ docker compose up --build
+ ```
+All tests must pass.
 
 
 ## How To
@@ -61,7 +71,7 @@ Given a Pokemon name, this endpoint returns its:
 
 Example call and API response:
 ```
-http://localhost:5000/pokemon/mewtwo
+http://localhost:6000/pokemon/mewtwo
 ```
 ```json
 {
@@ -90,7 +100,7 @@ If the translation service is not available, it uses the standard description.
  
 Example call and API response:
 ```
-http://localhost:5000/pokemon/translated/mewtwo
+http://localhost:6000/pokemon/translated/mewtwo
 ```
 ```json
 {
