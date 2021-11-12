@@ -117,7 +117,7 @@ class ExpectedJSON(ABC):
             return {
                 "name": "mewtwo",
                 "description": "Created by a scientist after years of horrific gene splicing "
-                               "and DNA engineering experiments, it was.",
+                               "and dna engineering experiments,  it was.",
                 "habitat": "rare",
                 "isLegendary": True
             }
@@ -147,7 +147,7 @@ class TestAPI(unittest.TestCase):
 
     # Default configuration
     HOST = '127.0.0.1'
-    PORT = 5000
+    PORT = 6000
 
     # Endpoints
     ENDPOINT_BASIC_INFO = f"http://{HOST}:{PORT}/pokemon"
@@ -171,7 +171,7 @@ class TestAPI(unittest.TestCase):
         """
         Test the response when asking for a unknown pokemon.
         """
-        response = requests.get(f"{self.ENDPOINT_BASIC_INFO}/nomekop")
+        response = requests.get(f"{self.ENDPOINT_TRANSLATED}/nomekop")
         self.assertEqual(404, response.status_code,
                          f"Expected 404 for unknown pokemon, status code {response.status_code}")
 
