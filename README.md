@@ -49,7 +49,7 @@ Before running tests, enable Docker Compose V2.
 To run tests:
 ```shell
 $ cd path_to/pokedex
-$ docker compose up --build --exit-code-from test-api
+$ docker compose up --build --abort-on-container-exit --exit-code-from test-api
  ```
 All tests must pass.
 
