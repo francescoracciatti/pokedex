@@ -1,6 +1,8 @@
 language: python
+python: "3.10"
 
 sudo: required
+
 services:
   - docker
 
@@ -9,6 +11,7 @@ before_install:
 
 before_script:
   - docker run -d -p 6000:6000 francescoracciatti/pokedex
+  - cd test
 
 script:
-  - cd test && python test_api.py --host 127.0.0.1 --port 6000 TestAPI
+  - python test_api.py --host 127.0.0.1 --port 6000 TestAPI
