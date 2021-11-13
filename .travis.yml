@@ -1,0 +1,29 @@
+language: python
+python: "3.9-dev"
+
+sudo: required
+
+services:
+  - docker
+
+env:
+  jobs:
+    - USE_NETWORK=true
+
+before_install:
+  - pip install -r requirements.txt
+  - pip install -e .
+
+jobs:
+  include:
+    - stage: run server
+      before_script:
+        - sudo apt-get update -y
+        - sudo apt-get install -y httpie
+      script:
+        - docker build --tag francescoracciatti/pokedex .
+        - docker run -d -p 6000:6000 francescoracciatti/pokedex
+        - "sleep 15"
+        - http http://127.0.0.1:6000/pokemon/mewtwo
+        - cd test
+        - python test_api.py --host 127.0.0.1 --port 6000 TestAPI

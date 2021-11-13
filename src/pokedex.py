@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import json
 import logging
-import sys
 
 import requests
 from flask import Flask, Response

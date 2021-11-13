@@ -61,8 +61,7 @@ class Pokemon(object):
         Builds the pokemon from a json containing its description.
 
         :param json: the json containing the description of the pokemon
-        :param configuration: the configuration parameters
-        """
+\        """
         self.name = json['name']
         self.description = json['description']
         self.habitat = json['habitat']

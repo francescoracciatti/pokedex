@@ -7,7 +7,7 @@ import sys
 import unittest
 from abc import ABC
 from ipaddress import ip_address
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Union
 
 import requests as requests
 
@@ -18,7 +18,7 @@ class JSON(ABC):
     """
 
     @classmethod
-    def deepsort(cls, obj: Dict[str, Any] | List[Any]) -> List[Any]:
+    def deepsort(cls, obj: Union[Dict[str, Any], List[Any]]) -> List[Any]:
         """
         Recursively sort the given json.
         In particular it sorts any list it finds in the json, and converts dicts to lists of (key, value) pairs in order
