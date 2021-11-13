@@ -9,8 +9,9 @@ services:
 before_script:
   - docker build -t francescoracciatti/pokedex -f Dockerfile .
   - docker run -d -p 6000:6000 francescoracciatti/pokedex
+  - travis_wait 30 sleep infinity &
   - cd test
+  - docker build -t francescoracciatti/test -f Dockerfile .
 
 script:
-  - travis_wait 30 sleep infinity &
-  - python test_api.py --host 127.0.0.1 --port 6000 TestAPI
+  - docker run francescoracciatti/test
