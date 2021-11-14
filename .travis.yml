@@ -3,6 +3,9 @@ python: "3.9-dev"
 
 sudo: required
 
+services:
+  - docker
+
 env:
   jobs:
     - USE_NETWORK=true
@@ -13,9 +16,11 @@ before_install:
 jobs:
   include:
     - name: 'server'
+      - before_script: cd src
       - script:
         - export FLASK_APP=pokedex
         - flask run --host=0.0.0.0 --port=6000
+
     - name: 'client'
       - before_script: cd test
       - script:
