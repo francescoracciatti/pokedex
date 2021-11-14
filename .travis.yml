@@ -15,13 +15,13 @@ before_install:
 
 jobs:
   include:
-    - name: 'server'
-      - before_script: cd src
-      - script:
+    - stage: run server
+      script:
+        - cd src
         - export FLASK_APP=pokedex
         - flask run --host=0.0.0.0 --port=6000
 
-    - name: 'client'
-      - before_script: cd test
-      - script:
-          - python test_api.py --host 127.0.0.1 --port 6000 TestAPI
+    - stage: test
+      script:
+        - cd test
+        - python test_api.py --host 127.0.0.1 --port 6000 TestAPI
