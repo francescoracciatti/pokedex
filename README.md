@@ -1,3 +1,5 @@
+![travis-ci](https://app.travis-ci.com/francescoracciatti/pokedex.svg?branch=master)
+
 # Pokedex
 Pokedex is a micro web server that provides public endpoints to gather information about Pokemon.
 
