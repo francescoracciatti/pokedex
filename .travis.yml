@@ -23,13 +23,7 @@ jobs:
       script:
         - docker build --tag francescoracciatti/pokedex .
         - docker run -d -p 6000:6000 francescoracciatti/pokedex
-        - http http://127.0.0.1:6000/pokemon/mewtwo
-
-    - stage: test
-      before_script:
-        - sudo apt-get update -y
-        - sudo apt-get install -y httpie
-      script:
+        - "sleep 15"
         - http http://127.0.0.1:6000/pokemon/mewtwo
         - cd test
         - python test_api.py --host 127.0.0.1 --port 6000 TestAPI
