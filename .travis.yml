@@ -10,12 +10,16 @@ env:
   jobs:
     - USE_NETWORK=true
 
-before_script:
-  - docker build -t francescoracciatti/pokedex -f Dockerfile .
-  - docker run -d -p 6000:6000 francescoracciatti/pokedex
-  - travis_wait 30 sleep infinity &
-  - cd test
-  - docker build -t francescoracciatti/test -f Dockerfile .
+before_install:
+  - pip install -r requirements.txt
 
-script:
-  - docker run francescoracciatti/test
+jobs:
+  include:
+    - name: 'server'
+      - script:
+        - export FLASK_APP=pokedex
+        - flask run --host=0.0.0.0 --port=6000
+    - name: 'client'
+      - before_script: cd test
+      - script:
+          - python test_api.py --host 127.0.0.1 --port 6000 TestAPI
