@@ -16,13 +16,10 @@ before_install:
 
 jobs:
   include:
-    - stage: build server
-      script:
-        - docker build --tag pokedex .
-
     - stage: run server
       script:
-        - docker run -d --network host -p 6000:6000 pokedex
+        - docker build --tag francescoracciatti/pokedex .
+        - docker run -d --network host -p 6000:6000 francescoracciatti/pokedex
 
     - stage: test
       script:
