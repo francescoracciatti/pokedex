@@ -17,6 +17,9 @@ before_install:
 jobs:
   include:
     - stage: run server
+      before_script:
+        - sudo apt-get update -y
+        - sudo apt-get install -y httpie
       script:
         - docker build --tag francescoracciatti/pokedex .
         - docker run -d -p 6000:6000 francescoracciatti/pokedex
