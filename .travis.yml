@@ -19,7 +19,7 @@ jobs:
     - stage: run server
       script:
         - docker build --tag francescoracciatti/pokedex .
-        - docker run -d --network host -p 6000:6000 francescoracciatti/pokedex
+        - docker run -d -p 6000:6000 francescoracciatti/pokedex
 
     - stage: test
       script:
