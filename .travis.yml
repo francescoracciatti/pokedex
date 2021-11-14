@@ -20,6 +20,7 @@ jobs:
       script:
         - docker build --tag francescoracciatti/pokedex .
         - docker run -d -p 6000:6000 francescoracciatti/pokedex
+        - http http://127.0.0.1:6000/pokemon/mewtwo
 
     - stage: test
       before_script:
