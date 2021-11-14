@@ -1,0 +1,23 @@
+stages:
+  - build
+  - run-server
+  - test
+
+build-job:
+  stage: build
+  script:
+    - docker build --tag pokedex .
+    - cd test
+    - docker build --tag test .
+    - cd ..
+
+run-server-job:
+  stage: run-server
+  script:
+    - docker run --network host -p 6000:6000 pokedex
+    - sleep 60
+
+test-job:
+  stage: test
+  script:
+    - docker run --network host test
