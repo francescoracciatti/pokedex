@@ -3,9 +3,6 @@ python: "3.9-dev"
 
 sudo: required
 
-services:
-  - docker
-
 env:
   jobs:
     - USE_NETWORK=true
