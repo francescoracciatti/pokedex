@@ -2,6 +2,7 @@
 
 # Base image
 FROM python:latest
+EXPOSE 6000
 
 # Use app as a default location for all the subsequent commands
 WORKDIR /pokedex

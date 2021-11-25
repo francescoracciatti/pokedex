@@ -27,3 +27,16 @@ jobs:
         - http http://127.0.0.1:6000/pokemon/mewtwo
         - cd test
         - python test_api.py --host 127.0.0.1 --port 6000 TestAPI
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "pokedex"
+  env: "Pokedex-env"
+  bucket_name: "elasticbeanstalk-us-east-2-560300415273"
+  bucket_path: "pokedex"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key:
+    secure: $AWS_SECRET_ACCESS_KEY
