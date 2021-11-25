@@ -27,6 +27,7 @@ jobs:
         - http http://127.0.0.1:6000/pokemon/mewtwo
         - cd test
         - python test_api.py --host 127.0.0.1 --port 6000 TestAPI
+<<<<<<< HEAD
 
 deploy:
   provider: elasticbeanstalk
@@ -40,3 +41,5 @@ deploy:
   access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key:
     secure: $AWS_SECRET_ACCESS_KEY
+=======
+>>>>>>> e5add3481b3a5ff3788f31aec487855ea550ac9a
